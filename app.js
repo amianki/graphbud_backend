@@ -35,7 +35,7 @@ app.get('/companies', (req, res) => {
 
 // GET BY ID
 app.get('/company/:id', (req, res) => {
-    let companyById = "Id does not exist!!";
+    // let companyById = "Id does not exist!!";
     // for (let index = 0; index < companies.length; index++) {
     //     if (companies[index].id == req.params.id) {
     //         companyById = companies[index]; 
@@ -46,9 +46,14 @@ app.get('/company/:id', (req, res) => {
     //         companyById = company;
     //     }
     // });
-    // myDb.run(`SELECT * FROM COMPANIES WHERE id = '${req.params.id}'`,)
 
-    res.send(companyById);
+    // FIND BY ID
+    myDb.all(`SELECT * FROM companies WHERE id = '${req.params.id}'`,(err,rows)=>{
+        if(err) console.error(err);
+        res.send(rows);
+    })
+
+   
 
 });
 
