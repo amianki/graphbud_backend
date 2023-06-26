@@ -59,40 +59,46 @@ app.get('/company/:id', (req, res) => {
 
 // ADD NEW COMPANY
 app.post('/company', (req, res) => {
-    companies.push(
-        {
-            id: 4567,
-            name: "infosys",
-            location: "bangalore"
-        }
-    )
+    // companies.push(
+    //     {
+    //         id: 4567,
+    //         name: "infosys",
+    //         location: "bangalore"
+    //     }
+    // )
+    myDb.run(`INSERT INTO companies VALUES("${req.body.id}","${req.body.name}","${req.body.location}")`);
 
-    res.send("successfull");
+    res.status(201).send("successfull");
 
 });
 
 // UPDATE COMPANY
 app.put('/company/:id', (req, res) => {
-    let updatedCompany = {
-        id: req.body.id,
-        name: req.body.name,
-        location: req.body.location
-    }
-    for (let index = 0; index < companies.length; index++) {
-        if (companies[index].id == req.params.id) {
-            companies[index] = updatedCompany;
-        }
-    }
-    res.send(updatedCompany);
+    // let updatedCompany = {
+    //     id: req.body.id,
+    //     name: req.body.name,
+    //     location: req.body.location
+    // }
+    // for (let index = 0; index < companies.length; index++) {
+    //     if (companies[index].id == req.params.id) {
+    //         companies[index] = updatedCompany;
+    //     }
+    // }
+    myDb.run(`UPDATE companies SET name = '${req.body.name}', location = '${req.body.location}' WHERE id = "${req.params.id}"`,(err, result) =>{
+        if(err) console.log(err.message)
+        res.send(result);
+    }) 
+    
 })
 
 // DELETE COMPANY DETAILS BY ID
 app.delete('/company/:id', (req, res) => {
-    for (let index = 0; index < companies.length; index++) {
-        if (companies[index].id == req.params.id) {
-            companies.splice(index, 1);
-        }
-    }
+    // for (let index = 0; index < companies.length; index++) {
+    //     if (companies[index].id == req.params.id) {
+    //         companies.splice(index, 1);
+    //     }
+    // }
+    myDb.run(`DELETE FROM companies WHERE id = '${req.params.id}'`);
     res.send("deleted successfully..");
 })
 app.listen(port, () => {
